@@ -1,0 +1,15 @@
+FROM pytorch/pytorch:1.12.1-cuda11.3-cudnn8-runtime
+
+RUN apt-get update && apt-get upgrade -y && apt-get install -y \
+    git \
+    wget \
+    libgtk2.0-dev \
+    pkg-config \
+    libgl1-mesa-dev \
+    build-essential
+
+WORKDIR /workspace
+
+RUN git clone https://github.com/Megvii-BaseDetection/YOLOX.git && cd YOLOX && pip install -v -e .
+COPY model_url_list.txt /workspace/YOLOX/
+RUN cd YOLOX && wget -i /workspace/YOLOX/model_url_list.txt
